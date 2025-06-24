@@ -40,6 +40,10 @@ Before building SPARC IDE, ensure your system meets the following requirements:
   - Required for native module compilation
 - **jq**: Command-line JSON processor
   - Installation: `sudo apt-get install jq` (Linux) or `brew install jq` (macOS)
+- **Rust**: Required for building the VSCode CLI component
+  - Installation: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+  - After installation, run: `source $HOME/.cargo/env`
+  - Verify with: `rustc --version`
 
 #### Linux-specific
 
@@ -79,6 +83,8 @@ You can verify that you have the required software installed by running:
 git --version
 node --version
 yarn --version
+rustc --version
+cargo --version
 ```
 
 ## Building from Source

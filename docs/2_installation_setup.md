@@ -302,8 +302,13 @@ Before building SPARC IDE, ensure you have the following tools installed:
 
 #### All Platforms
 - **Git**: For cloning the repository
-- **Node.js**: Version 18 or later
-- **Yarn**: Version 1.22 or later
+- **Node.js**: Version 20.18 or later (VSCodium requirement)
+- **Yarn**: Version 1.22.19 or later
+- **Python 3**: Version 3.11 or later
+- **jq**: Command-line JSON processor
+- **Rust**: Required for building the VSCode CLI component
+  - Install: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+  - After installation: `source $HOME/.cargo/env`
 
 #### Linux-specific
 Install the following packages:

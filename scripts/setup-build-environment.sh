@@ -58,6 +58,22 @@ check_prerequisites() {
         npm install -g yarn@$YARN_VERSION
     fi
     
+    # Check if Rust/rustup is installed
+    if ! command -v rustup &> /dev/null; then
+        print_error "Rust is not installed. Please install Rust by running:"
+        print_error "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
+        print_error "After installation, restart your terminal or run: source \$HOME/.cargo/env"
+        exit 1
+    fi
+    
+    # Check if cargo is available
+    if ! command -v cargo &> /dev/null; then
+        print_error "Cargo is not available. Please ensure Rust is properly installed and cargo is in your PATH."
+        exit 1
+    fi
+    
+    print_info "Rust toolchain detected: $(rustc --version)"
+    
     # Check platform-specific dependencies
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         print_info "Checking Linux dependencies..."
