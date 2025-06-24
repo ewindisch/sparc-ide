@@ -31,10 +31,15 @@ Before building SPARC IDE, ensure your system meets the following requirements:
 
 - **Git**: For cloning the repository
   - Installation: [https://git-scm.com/downloads](https://git-scm.com/downloads)
-- **Node.js**: Version 16 or later
+- **Node.js**: Version 20.18 (VSCodium requirement)
   - Installation: [https://nodejs.org/](https://nodejs.org/)
-- **Yarn**: Version 1.22 or later
+  - Note: Use Node Version Manager (nvm) for easier version management
+- **Yarn**: Version 1.22.19 or later
   - Installation: `npm install -g yarn`
+- **Python 3**: Version 3.11 or later
+  - Required for native module compilation
+- **jq**: Command-line JSON processor
+  - Installation: `sudo apt-get install jq` (Linux) or `brew install jq` (macOS)
 
 #### Linux-specific
 
@@ -43,13 +48,17 @@ Install the following packages:
 **Ubuntu/Debian**:
 ```bash
 sudo apt update
-sudo apt install build-essential libx11-dev libxkbfile-dev libsecret-1-dev fakeroot rpm
+sudo apt install build-essential gcc g++ make pkg-config libx11-dev libxkbfile-dev \
+  libsecret-1-dev libkrb5-dev fakeroot rpm dpkg imagemagick jq python3 python3-pip
 ```
 
 **Fedora**:
 ```bash
-sudo dnf install make gcc gcc-c++ libX11-devel libxkbfile-devel libsecret-devel rpm-build
+sudo dnf install make gcc gcc-c++ pkg-config libX11-devel libxkbfile-devel \
+  libsecret-devel krb5-devel rpm-build ImageMagick jq python3 python3-pip
 ```
+
+**Note**: libkrb5-dev is required for building Kerberos authentication modules in VS Code.
 
 #### Windows-specific
 
@@ -103,7 +112,37 @@ The setup script performs the following tasks:
 
 ### 3. Build SPARC IDE
 
-After the setup is complete, you can build SPARC IDE for your platform:
+SPARC IDE is built on top of VSCodium, which requires a specific build process. After setup is complete:
+
+#### Option 1: Development Build (Recommended for first-time builders)
+
+```bash
+cd vscodium
+./dev/build.sh
+```
+
+This will:
+- Clone the VS Code source repository
+- Apply VSCodium patches
+- Install dependencies
+- Build the application
+
+#### Option 2: Production Build
+
+```bash
+cd vscodium
+export SHOULD_BUILD="yes"
+export SHOULD_BUILD_REH="no"
+export CI_BUILD="no"
+export OS_NAME="linux"  # or "osx" for macOS, "windows" for Windows
+export VSCODE_ARCH="x64"  # or "arm64" for ARM processors
+export VSCODE_QUALITY="stable"
+
+./get_repo.sh
+./build.sh
+```
+
+#### Option 3: Using SPARC IDE Build Script (Simplified)
 
 ```bash
 # Make the build script executable
@@ -118,7 +157,7 @@ chmod +x scripts/build-sparc-ide.sh
 ./scripts/build-sparc-ide.sh --platform macos
 ```
 
-The build process may take 30-60 minutes depending on your system's performance.
+**Note**: The build process may take 30-90 minutes depending on your system's performance. The first build will be slower as it downloads and compiles all dependencies.
 
 ### 4. Locate Build Artifacts
 
@@ -225,16 +264,21 @@ xcode-select --install
 
 #### Node.js Version Issues
 
-If you encounter errors related to Node.js version:
+VSCodium requires a specific Node.js version. If you encounter errors:
 
 1. Install Node Version Manager (nvm):
    - [https://github.com/nvm-sh/nvm](https://github.com/nvm-sh/nvm) (Linux/macOS)
    - [https://github.com/coreybutler/nvm-windows](https://github.com/coreybutler/nvm-windows) (Windows)
 
-2. Install and use Node.js 16:
+2. Install and use Node.js 20.18:
    ```bash
-   nvm install 16
-   nvm use 16
+   nvm install 20.18
+   nvm use 20.18
+   ```
+
+3. Verify the version:
+   ```bash
+   node --version  # Should show v20.18.x
    ```
 
 #### Build Script Permission Issues

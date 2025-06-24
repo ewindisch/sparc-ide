@@ -36,8 +36,8 @@ check_vscodium() {
     fi
     
     # Verify that it's a valid VSCodium directory
-    if [ ! -f "$VSCODIUM_DIR/package.json" ]; then
-        print_error "Invalid VSCodium directory. package.json not found."
+    if [ ! -f "$VSCODIUM_DIR/build.sh" ]; then
+        print_error "Invalid VSCodium directory. build.sh not found."
         exit 1
     fi
     

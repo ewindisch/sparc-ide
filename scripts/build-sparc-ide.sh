@@ -322,20 +322,43 @@ build_sparc_ide() {
     
     cd vscodium
     
+    # Set up VSCodium build environment variables
+    export SHOULD_BUILD="yes"
+    export SHOULD_BUILD_REH="no"
+    export CI_BUILD="no"
+    export VSCODE_QUALITY="stable"
+    
     case "$PLATFORM" in
         linux)
             print_info "Building for Linux..."
-            yarn gulp vscode-linux-x64
+            export OS_NAME="linux"
+            export VSCODE_ARCH="x64"
             ;;
         windows)
             print_info "Building for Windows..."
-            yarn gulp vscode-win32-x64
+            export OS_NAME="windows"
+            export VSCODE_ARCH="x64"
             ;;
         macos)
             print_info "Building for macOS..."
-            yarn gulp vscode-darwin-x64
+            export OS_NAME="osx"
+            export VSCODE_ARCH="x64"
             ;;
     esac
+    
+    # Use VSCodium's native build process
+    print_info "Using VSCodium build process..."
+    
+    # For development builds, use the dev script
+    if [ -f "./dev/build.sh" ]; then
+        print_info "Running VSCodium dev build script..."
+        ./dev/build.sh
+    else
+        # For production builds, use the standard process
+        print_info "Running VSCodium production build..."
+        ./get_repo.sh
+        ./build.sh
+    fi
     
     cd ..
     
@@ -348,25 +371,40 @@ create_packages() {
     
     cd vscodium
     
+    # VSCodium's build process creates packages automatically
+    print_info "VSCodium build process creates packages automatically."
+    print_info "Checking for generated packages..."
+    
     case "$PLATFORM" in
         linux)
-            print_info "Creating Linux packages..."
-            yarn run gulp vscode-linux-x64-build-deb
-            yarn run gulp vscode-linux-x64-build-rpm
+            print_info "Looking for Linux packages..."
+            if ls *.deb *.rpm *.tar.gz 2>/dev/null; then
+                print_success "Linux packages found."
+            else
+                print_warning "No Linux packages found. They may be in a subdirectory."
+            fi
             ;;
         windows)
-            print_info "Creating Windows installer..."
-            yarn run gulp vscode-win32-x64-build-nsis
+            print_info "Looking for Windows installer..."
+            if ls *.exe *.zip 2>/dev/null; then
+                print_success "Windows installer found."
+            else
+                print_warning "No Windows installer found. It may be in a subdirectory."
+            fi
             ;;
         macos)
-            print_info "Creating macOS package..."
-            yarn run gulp vscode-darwin-x64-build-dmg
+            print_info "Looking for macOS package..."
+            if ls *.dmg *.zip 2>/dev/null; then
+                print_success "macOS package found."
+            else
+                print_warning "No macOS package found. It may be in a subdirectory."
+            fi
             ;;
     esac
     
     cd ..
     
-    print_success "Packages created successfully for $PLATFORM."
+    print_success "Package creation phase completed."
 }
 
 # Copy artifacts

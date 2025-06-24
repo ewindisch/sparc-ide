@@ -144,10 +144,12 @@ Each phase has dedicated templates, AI prompts, and tools to help you work effic
 ## Building from Source
 
 ### Prerequisites
-- Node.js 18+
-- Yarn 1.22+
+- Node.js 20.18 (required by VSCodium)
+- Yarn 1.22.19+
+- Python 3.11+
 - Git
-- Platform-specific build dependencies
+- jq
+- Platform-specific build dependencies (see [Build Guide](docs/build-guide.md))
 
 ### Build Instructions
 
@@ -171,12 +173,14 @@ Each phase has dedicated templates, AI prompts, and tools to help you work effic
 
 4. The build artifacts will be available in the `dist/` directory.
 
-For detailed build instructions, see [Installation Guide](docs/installation-guide.md).
+For detailed build instructions, see [Build Guide](docs/build-guide.md).
 
 ## Documentation
 
+- [Installation Guide](docs/installation-guide.md): Installing pre-built packages
+- [Build Guide](docs/build-guide.md): Building SPARC IDE from source
 - [User Guide](docs/user-guide.md): Comprehensive guide to using SPARC IDE
-- [Installation Guide](docs/installation-guide.md): Detailed installation instructions
+- [SPARC Methodology](docs/sparc-methodology.md): Understanding the SPARC approach
 - [Contributing Guide](docs/CONTRIBUTING.md): How to contribute to SPARC IDE
 - [Security Enhancements](docs/security-enhancements.md): Security features and improvements
 - [Packaging Guide](docs/packaging-guide.md): How to package SPARC IDE for distribution

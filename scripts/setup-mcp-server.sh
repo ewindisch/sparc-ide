@@ -1340,7 +1340,6 @@ fi
 echo "Security checks passed. Starting MCP server..."
 npm start
 EOL
-EOL
     
     chmod +x "$MCP_DIR/start-mcp-server.sh"
     
