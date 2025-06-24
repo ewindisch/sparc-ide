@@ -29,6 +29,10 @@ print_header() {
     echo -e "\e[1;36m===== $1 =====\e[0m"
 }
 
+print_warning() {
+    echo -e "\e[1;33m[WARNING]\e[0m $1"
+}
+
 # Parse command line arguments
 parse_args() {
     while [[ $# -gt 0 ]]; do
